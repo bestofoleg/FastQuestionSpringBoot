@@ -27,7 +27,7 @@ public class LanguageDaoImpl implements IDAO<Language>{
     }
 
     @Override
-    public Language save(Language language) {
+    public Language saveOrUpdate(Language language) {
         return entityManager.merge(language);
     }
 

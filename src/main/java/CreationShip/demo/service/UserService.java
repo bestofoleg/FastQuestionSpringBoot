@@ -48,9 +48,9 @@ public class UserService implements ISerivce<User>{
 
     @Override
     @Transactional
-    public User save(User user) {
+    public User saveOrUpdate(User user) {
         user.setRole_id(roleDao.getById(1L));
-        return this.userDao.save(user);
+        return this.userDao.saveOrUpdate(user);
     }
 
     @Override

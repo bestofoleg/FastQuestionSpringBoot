@@ -45,7 +45,7 @@ public class UserController
     {
         if(this.userService.validateUsernameAndPassword(user.getUsername(), user.getPassword()))
         {
-            this.userService.save(user);
+            this.userService.saveOrUpdate(user);
             return user;
         }
 

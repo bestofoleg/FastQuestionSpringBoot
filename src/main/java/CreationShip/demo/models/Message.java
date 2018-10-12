@@ -27,7 +27,8 @@ public class Message {
 
     public Message(){}
 
-    public Message(Question question_id, String message) {
+    public Message(Question question_id, String message)
+    {
         this.question_id = question_id;
         this.message = message;
     }
@@ -65,7 +66,8 @@ public class Message {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Message{" +
                 "id=" + id +
                 ", question_id=" + question_id +

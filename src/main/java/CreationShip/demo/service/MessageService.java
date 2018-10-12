@@ -2,87 +2,99 @@ package CreationShip.demo.service;
 
 import CreationShip.demo.dao.MessageDaoImpl;
 import CreationShip.demo.dao.QuestionDaoImpl;
+import CreationShip.demo.logic.Logic;
 import CreationShip.demo.models.Message;
-import CreationShip.demo.models.Question;
-import CreationShip.demo.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
-public class MessageService implements ISerivce<Message>{
+public class MessageService implements ISerivce<Message>
+{
 
     @Autowired
-    MessageDaoImpl messageDao;
+    private MessageDaoImpl messageDao;
 
     @Autowired
-    QuestionDaoImpl questionDao;
-
-    @Autowired
-    UserService userService;
-
-
+    private QuestionDaoImpl questionDao;
 
     public MessageService(){}
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Message> getAll() {
-       return messageDao.getAll();
-    }
+    @Transactional
+    public List<Message> getMyMessages(HttpSession session)
+    {
+        Logic logic = (Logic) session.getAttribute("Logic");
 
-    @Override
-    @Transactional(readOnly = true)
-    public Message getById(Long id) {
-        return messageDao.getById(id);
-    }
+        if(logic == null)
+            return new ArrayList<Message>();
 
-    @Transactional(readOnly = true)
-    public List<Message> getMessagesByMyQuestionIds(Set<Long> ids) {
+        List<Long> idsList = logic.getIdsList();
+        List<Message> messages = new ArrayList<>();
 
-        List<Message> result = new ArrayList<>();
-
-        for(Long id : ids)
+        for(Long id : idsList)
         {
-            result.addAll(messageDao.getByQuestion(this.questionDao.getById(id)));
+            messages.addAll(this.messageDao.getByQuestion(this.questionDao.getById(id)));
         }
 
-        return result;
+        return messages;
     }
 
     @Override
     @Transactional
-    public Message save(Message message) {
-       return messageDao.save(message);
+    public List<Message> getAll()
+    {
+        return this.messageDao.getAll();
     }
 
     @Override
     @Transactional
-    public Message remove(Message message) {
-        return messageDao.remove(message);
+    public Message getById(Long id)
+    {
+        return this.messageDao.getById(id);
     }
 
-    @Transactional(readOnly = true)
-    public List<Message> getByQuestion(Long id){
-        return messageDao.getByQuestion(id);
+    @Override
+    @Transactional
+    public Message saveOrUpdate(Message message)
+    {
+        return this.messageDao.saveOrUpdate(message);
     }
 
-    @Transactional(readOnly = true)
-    public List<Message> getMessagesByUser(User user){
+    @Transactional
+    public Message saveOrUpdate(Message message, HttpSession session)
+    {
 
-        user.setId(userService.getIdByUsername(user.getUsername()));
+        if(!message.getMessage().isEmpty())
+        {
+            Logic logic = (Logic) session.getAttribute("Logic");
 
-        return messageDao.getMessagesByUserId(user.getId());
+            if(logic == null)
+            {
+                logic = new Logic();
+            }
+
+            logic.sendAnswer();
+
+            session.setAttribute("Logic", logic);
+
+            return this.messageDao.saveOrUpdate(message);
+        }
+
+        return null;
+
     }
 
-    @Transactional(readOnly = true)
-    public List<Message> getByQuestion(Long id, Long lastId){
-        return messageDao.getByQuestion(id,lastId);
+    @Override
+    @Transactional
+    public Message remove(Message message)
+    {
+        System.out.println("Метод remove класса MessageService не реализован!");
+        throw new NotImplementedException();
     }
-
 
 }

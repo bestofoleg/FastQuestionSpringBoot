@@ -10,63 +10,68 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
-public class QuestionDaoImpl implements IDAO<Question> {
+public class QuestionDaoImpl implements IDAO<Question>
+{
 
     private static final Logger log = Logger.getLogger(QuestionDaoImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public QuestionDaoImpl() {
-    }
+    public QuestionDaoImpl(){}
 
-
-    public List<Question> getAll() {
-
-            return entityManager.createQuery("SELECT p FROM Question p").getResultList();
+    public List<Question> getAll()
+    {
+        return entityManager.createQuery("SELECT p FROM Question p").getResultList();
     }
 
     @Override
-    public Question getById(Long id) {
-           return entityManager.find(Question.class, id);
+    public Question getById(Long id)
+    {
+        return entityManager.find(Question.class, id);
     }
 
-
-    public Question create(Question question) {
-           return  (Question) entityManager.merge(question);
+    public Question create(Question question)
+    {
+        return  (Question) entityManager.merge(question);
     }
 
-    public List<Question> getRandomQuestion(int count) {
-            return  (List<Question>) entityManager.createQuery("SELECT p FROM Question p order by rand()")
+    public List<Question> getRandomQuestion(int count)
+    {
+        return  (List<Question>) entityManager.createQuery("SELECT p FROM Question p order by rand()")
                     .setMaxResults(count)
                     .getResultList();
-        }
+    }
 
-    public List<Question> getRandomQuestionByLanguage(int count, String lang) {
-
-            return entityManager.createQuery("SELECT p FROM Question p WHERE p.language_id.language_name = :language_name ORDER BY rand()")
+    public List<Question> getRandomQuestionByLanguage(int count, String lang)
+    {
+        return entityManager.createQuery("SELECT p FROM Question p WHERE p.language_id.language_name = :language_name ORDER BY rand()")
                 .setParameter("language_name",lang).setMaxResults(count).getResultList();
     }
 
 
-    public List<Question> getByQuestion(String question) {
-            return  (List<Question>) entityManager.createQuery("SELECT p FROM Question p WHERE p.question = :question")
+    public List<Question> getByQuestion(String question)
+    {
+        return  (List<Question>) entityManager.createQuery("SELECT p FROM Question p WHERE p.question = :question")
                     .setParameter("question", question)
                     .getResultList();
-        }
+    }
 
 
     @Override
-    public Question save(Question question) {
-            return entityManager.merge(question);
+    public Question saveOrUpdate(Question question)
+    {
+        return entityManager.merge(question);
     }
 
     @Override
-    public Question remove(Question question) {
+    public Question remove(Question question)
+    {
         return null;
     }
 
-    public Long saveOrUpdateId(Question question) {
-            return entityManager.merge(question).getId();
+    public Long saveOrUpdateId(Question question)
+    {
+        return entityManager.merge(question).getId();
     }
 }

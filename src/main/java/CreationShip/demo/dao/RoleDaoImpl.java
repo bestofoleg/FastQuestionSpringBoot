@@ -25,7 +25,7 @@ public class RoleDaoImpl implements IDAO<Role>{
     }
 
     @Override
-    public Role save(Role role) {
+    public Role saveOrUpdate(Role role) {
         return null;
     }
 

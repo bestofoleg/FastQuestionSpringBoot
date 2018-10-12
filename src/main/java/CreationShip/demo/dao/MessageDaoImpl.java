@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import java.util.List;
 
 @Repository
@@ -98,11 +99,21 @@ public class MessageDaoImpl implements IDAO<Message> {
      }
 
     @Override
-    public Message save(Message message) {
+    public Message saveOrUpdate(Message message)
+    {
 
-        entityManager.persist(message);
+        try
+        {
+            entityManager.persist(message);
+        }
+        catch (PersistenceException e)
+        {
+            System.out.println("Ошибка добавления сущности!");
+            e.printStackTrace();
+        }
 
         return message;
+
     }
 
 }

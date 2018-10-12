@@ -9,11 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class LanguageService implements ISerivce<Language> {
+public class LanguageService implements ISerivce<Language>
+{
 
     @Autowired
     LanguageDaoImpl languageDao;
-
 
     @Override
     @Transactional(readOnly = true)
@@ -28,8 +28,8 @@ public class LanguageService implements ISerivce<Language> {
 
     @Override
     @Transactional
-    public Language save(Language language) {
-        return languageDao.save(language);
+    public Language saveOrUpdate(Language language) {
+        return languageDao.saveOrUpdate(language);
     }
 
     @Override

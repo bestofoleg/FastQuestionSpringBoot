@@ -7,7 +7,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "questions")
-public class Question {
+public class Question
+{
 
     @Id
     @Column(name = "id", unique = true, nullable = false)
@@ -25,7 +26,8 @@ public class Question {
     public Question(){}
 
 
-    public Question(String question, Language language_id){
+    public Question(String question, Language language_id)
+    {
         this.language_id = language_id;
         this.question = question;
     }
@@ -55,7 +57,8 @@ public class Question {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Question{" +
                 "id=" + id +
                 ", question='" + question.toString() + '\'' +

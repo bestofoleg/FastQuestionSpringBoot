@@ -55,7 +55,7 @@ public class UserDaoImpl implements IDAO<User>
     }
 
     @Override
-    public User save(User user) {
+    public User saveOrUpdate(User user) {
         try {
 
             this.entityManager.persist(user);
